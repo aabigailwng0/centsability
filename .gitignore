@@ -147,3 +147,17 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# ---- Centsability ----
+# Secrets: ignore real env files, keep the example
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Build output
+dist/
+
+# OS / editor
+.DS_Store
+Thumbs.db
