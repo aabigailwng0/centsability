@@ -10,8 +10,8 @@ export default function AvatarSelectScreen() {
   };
 
   return (
-    <section className="screen screen--center" aria-labelledby="avatar-title">
-      <h1 id="avatar-title" className="heading" tabIndex={-1}>
+    <section className="screen screen--center screen--over-home" aria-labelledby="avatar-title">
+      <h1 id="avatar-title" className="heading card title-card" tabIndex={-1}>
         Choose your avatar
       </h1>
 

@@ -1,0 +1,86 @@
+[
+  {
+    "sourceCustomerId": "bf4cbbb5-c27b-4940-84df-a5fe79b3da29",
+    "topic": "debt",
+    "facts": {
+      "monthlyIncome": 6231,
+      "monthlySpending": 709,
+      "checking": 3400,
+      "savings": 2200,
+      "creditCard": 900,
+      "topMerchants": [
+        {
+          "name": "Greenleaf Grocers",
+          "monthly": 158
+        },
+        {
+          "name": "Corner Basket Market",
+          "monthly": 118
+        },
+        {
+          "name": "Gadget Grove",
+          "monthly": 71
+        }
+      ]
+    },
+    "name": "Julian",
+    "personality": "A meticulous graphic designer who stresses over any outstanding balance.",
+    "speechBubble": "I'm currently carrying 900 on my credit card, which is the main debt keeping me on edge. Even though my monthly income is 6231 and I have 3400 in checking, seeing that unpaid balance bothers me. I really want to resolve that 900 without having to touch the 2200 I put in savings."
+  },
+  {
+    "sourceCustomerId": "23e44885-66cb-4c34-a455-371ea706789b",
+    "topic": "debt",
+    "facts": {
+      "monthlyIncome": 6231,
+      "monthlySpending": 709,
+      "checking": 3400,
+      "savings": 2200,
+      "creditCard": 900,
+      "topMerchants": [
+        {
+          "name": "Greenleaf Grocers",
+          "monthly": 158
+        },
+        {
+          "name": "Corner Basket Market",
+          "monthly": 118
+        },
+        {
+          "name": "Gadget Grove",
+          "monthly": 71
+        }
+      ]
+    },
+    "name": "Marcus",
+    "personality": "A cautious graphic designer who feels uneasy carrying any unpaid balances.",
+    "speechBubble": "I'm currently sitting on a credit card balance of 900, which bothers me even though I have 3400 in checking. My monthly income is 6231, but seeing that outstanding balance linger still stresses me out."
+  },
+  {
+    "sourceCustomerId": "3cf317ff-2749-47ed-ab18-c6ec3efbd8be",
+    "topic": "debt",
+    "facts": {
+      "monthlyIncome": 4501,
+      "monthlySpending": 651,
+      "checking": 5000,
+      "savings": 4500,
+      "creditCard": 400,
+      "topMerchants": [
+        {
+          "name": "Corner Basket Market",
+          "monthly": 97
+        },
+        {
+          "name": "Greenleaf Grocers",
+          "monthly": 81
+        },
+        {
+          "name": "Hometown Goods",
+          "monthly": 53
+        }
+      ]
+    },
+    "name": "Maya",
+    "personality": "An organized budgeter who gets anxious whenever she owes anything.",
+    "speechBubble": "I'm keeping a close eye on my credit card balance of $400 because carrying any kind of balance stresses me out. Even though my monthly income is $4501 and my total monthly spending was just $651, seeing that debt on my statement bothers me. I always feel uneasy until every balance is completely resolved."
+  }
+]

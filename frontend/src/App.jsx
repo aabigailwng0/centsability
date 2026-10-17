@@ -4,7 +4,6 @@ import HomeScreen from './screens/HomeScreen.jsx';
 import AboutScreen from './screens/AboutScreen.jsx';
 import AvatarSelectScreen from './screens/AvatarSelectScreen.jsx';
 import GameScreen from './screens/GameScreen.jsx';
-import BackendStatus from './components/BackendStatus.jsx';
 
 const SCREEN_COMPONENTS = {
   [SCREENS.HOME]: HomeScreen,
@@ -37,9 +36,6 @@ export default function App() {
       <main id="main" ref={mainRef} className="app">
         <Screen />
       </main>
-      <footer className="app-footer">
-        <BackendStatus />
-      </footer>
     </>
   );
 }

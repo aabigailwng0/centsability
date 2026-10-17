@@ -4,8 +4,8 @@ export default function AboutScreen() {
   const { goHome } = useGame();
 
   return (
-    <section className="screen screen--center" aria-labelledby="about-title">
-      <h1 id="about-title" className="heading" tabIndex={-1}>
+    <section className="screen screen--center screen--over-home" aria-labelledby="about-title">
+      <h1 id="about-title" className="heading card title-card" tabIndex={-1}>
         About Centsability
       </h1>
       <div className="card prose">
