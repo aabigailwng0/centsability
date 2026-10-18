@@ -30,6 +30,16 @@ function shuffle(list) {
 
 const TOPICS = new Set(['budgeting', 'saving', 'debt']);
 
+// Stage 2 keeps 13, 12, 5, 2, and 0 so only one pair sums to 25.
+// Stage 3 reports that same choice on a 25-point scale.
+const STAGE3_POINTS = new Map([
+  [13, 25],
+  [12, 20],
+  [5, 15],
+  [2, 10],
+  [0, 0],
+]);
+
 export async function dealStrategies(topic) {
   if (!TOPICS.has(topic)) {
     const error = new Error('Unknown topic');
@@ -67,4 +77,36 @@ export function scoreStrategies(topic, strategyIds) {
   }
   const score = chosen[0].values[topic] + chosen[1].values[topic];
   return Math.min(25, Math.max(0, score));
+}
+
+export function scorePriority(topic, strategyIds, chosenId) {
+  if (!TOPICS.has(topic)) {
+    const error = new Error('Unknown topic');
+    error.status = 400;
+    throw error;
+  }
+  if (!Array.isArray(strategyIds) || strategyIds.length !== 2 || new Set(strategyIds).size !== 2) {
+    const error = new Error('Choose exactly two different strategies.');
+    error.status = 400;
+    throw error;
+  }
+  if (typeof chosenId !== 'string' || !strategyIds.includes(chosenId)) {
+    const error = new Error('Pick one of the two strategies.');
+    error.status = 400;
+    throw error;
+  }
+  const pair = strategyIds.map((id) => STRATEGIES.find((item) => item.id === id));
+  if (pair.some((item) => !item)) {
+    const error = new Error('Those strategies do not belong to this topic.');
+    error.status = 400;
+    throw error;
+  }
+  const picked = pair.find((item) => item.id === chosenId);
+  const score = STAGE3_POINTS.get(picked.values[topic]);
+  if (score == null) {
+    const error = new Error('That strategy has no stage 3 score.');
+    error.status = 500;
+    throw error;
+  }
+  return score;
 }

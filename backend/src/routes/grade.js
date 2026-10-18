@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { gradeListen } from '../grading/gradeListen.js';
-import { scoreStrategies } from '../game/strategies.js';
+import { scorePriority, scoreStrategies } from '../game/strategies.js';
 import { rateLimit } from '../http/rateLimit.js';
 
 const TOPICS = new Set(['budgeting', 'saving', 'debt']);
@@ -52,6 +52,26 @@ gradeRouter.post(
       res.json({ score });
     } catch (error) {
       res.status(error.status || 400).json({ error: 'Those choices could not be scored.' });
+    }
+  },
+);
+
+gradeRouter.post(
+  '/prioritize',
+  rateLimit({ windowMs: 60_000, max: 10 }),
+  (req, res) => {
+    const topic = req.body?.topic;
+    const strategyIds = req.body?.strategyIds;
+    const chosenId = req.body?.chosenId;
+    if (!TOPICS.has(topic)) {
+      res.status(400).json({ error: 'Unknown topic.' });
+      return;
+    }
+    try {
+      const score = scorePriority(topic, strategyIds, chosenId);
+      res.json({ score });
+    } catch (error) {
+      res.status(error.status || 400).json({ error: 'That choice could not be scored.' });
     }
   },
 );

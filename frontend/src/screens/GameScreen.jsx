@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import Stage1 from '../components/game/Stage1.jsx';
 import Stage2 from '../components/game/Stage2.jsx';
-import Stage3Placeholder from '../components/game/Stage3Placeholder.jsx';
+import Stage3 from '../components/game/Stage3.jsx';
+import Stage4Placeholder from '../components/game/Stage4Placeholder.jsx';
 import { useGame } from '../context/GameContext.jsx';
 
 export default function GameScreen() {
@@ -59,10 +60,24 @@ export default function GameScreen() {
 
   const customer = day.customers[day.customerIndex];
 
+  if (phase === 'stage4') {
+    return (
+      <>
+        <Stage4Placeholder />
+        <QuitButton onQuit={goHome} />
+      </>
+    );
+  }
+
   if (phase === 'stage3') {
     return (
       <>
-        <Stage3Placeholder />
+        <Stage3
+          customer={customer}
+          avatarId={avatar?.id}
+          debug={debug}
+          onFinished={() => setPhase('stage4')}
+        />
         <QuitButton onQuit={goHome} />
       </>
     );

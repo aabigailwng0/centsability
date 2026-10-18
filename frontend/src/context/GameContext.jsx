@@ -97,6 +97,21 @@ export function GameProvider({ children }) {
       });
   }, [recordListenScore]);
 
+  const recordPrioritize = useCallback((chosenId, score) => {
+    setDay((current) => {
+      if (!current) return current;
+      const customers = current.customers.map((customer, index) => {
+        if (index !== current.customerIndex || customer.scores.prioritize != null) return customer;
+        return {
+          ...customer,
+          chosenPriorityId: chosenId,
+          scores: { ...customer.scores, prioritize: score },
+        };
+      });
+      return { ...current, customers };
+    });
+  }, []);
+
   const recordStrategize = useCallback((strategies, chosenIds, score) => {
     setDay((current) => {
       if (!current) return current;
@@ -144,6 +159,7 @@ export function GameProvider({ children }) {
       recordListenScore,
       submitListenAnswer,
       recordStrategize,
+      recordPrioritize,
     }),
     [
       screen,
@@ -163,6 +179,7 @@ export function GameProvider({ children }) {
       recordListenScore,
       submitListenAnswer,
       recordStrategize,
+      recordPrioritize,
     ],
   );
 
