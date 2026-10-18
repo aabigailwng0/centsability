@@ -39,7 +39,7 @@ export const STAGE2_CLOUDS = [
   {
     id: 'top-right',
     button: { left: 57, top: 19, width: 30, height: 22 },
-    text: { left: 59.5, top: 24.5, width: 24, height: 13 },
+    text: { left: 58.2, top: 24.5, width: 24, height: 13 },
   },
   {
     id: 'mid-right',
@@ -54,7 +54,7 @@ export const STAGE2_CLOUDS = [
   {
     id: 'bottom-right',
     button: { left: 61, top: 65, width: 27, height: 22 },
-    text: { left: 63.5, top: 69.5, width: 20, height: 13 },
+    text: { left: 63.5, top: 71, width: 20, height: 13 },
   },
 ];
 

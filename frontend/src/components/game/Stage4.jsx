@@ -57,7 +57,7 @@ export default function Stage4({ customer, debug, lastCustomer, onNext }) {
       if (!response.ok || typeof data.score !== 'number' || !data.answer?.strategy) {
         throw new Error(data.error || 'That answer could not be checked.');
       }
-      recordConclude(data.score, data.feedback, data.answer);
+      recordConclude(data.score, data.feedback, data.answer, reason);
       setResult(data);
     } catch (error) {
       setSubmitError(error.message || 'That answer could not be checked.');

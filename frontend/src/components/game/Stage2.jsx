@@ -9,7 +9,7 @@ import {
 } from '../../config/stage2Layout.js';
 import { useGame } from '../../context/GameContext.jsx';
 import IssueNote from './IssueNote.jsx';
-import StrategyCloud from './StrategyCloud.jsx';
+import StrategyCloud, { CloudSizeGroup } from './StrategyCloud.jsx';
 
 function regionStyle(region) {
   return {
@@ -144,16 +144,20 @@ export default function Stage2({ customer, avatarId, debug, onFinished }) {
             <p className="stage2-title" style={regionStyle(STAGE2_TITLE)}>
               Choose the two best strategies
             </p>
-            {strategies && STAGE2_CLOUDS.map((cloud, index) => (
-              <StrategyCloud
-                key={cloud.id}
-                cloud={cloud}
-                text={strategies[index].text}
-                selected={selected.includes(strategies[index].id)}
-                rejecting={rejecting}
-                onToggle={() => toggleStrategy(strategies[index].id)}
-              />
-            ))}
+            {strategies && (
+              <CloudSizeGroup>
+                {STAGE2_CLOUDS.map((cloud, index) => (
+                  <StrategyCloud
+                    key={cloud.id}
+                    cloud={cloud}
+                    text={strategies[index].text}
+                    selected={selected.includes(strategies[index].id)}
+                    rejecting={rejecting}
+                    onToggle={() => toggleStrategy(strategies[index].id)}
+                  />
+                ))}
+              </CloudSizeGroup>
+            )}
             {loadError && (
               <p className="stage2-alert" role="alert">
                 {loadError}

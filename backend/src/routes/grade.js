@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { gradeConclude } from '../grading/gradeConclude.js';
+import { parseDayVisits, reviewDay } from '../grading/gradeDay.js';
 import { gradeListen } from '../grading/gradeListen.js';
 import { scorePriority, scoreStrategies } from '../game/strategies.js';
 import { rateLimit } from '../http/rateLimit.js';
@@ -70,6 +71,20 @@ gradeRouter.post(
       });
     } catch {
       res.status(500).json({ error: 'Grading failed. Please try again.' });
+    }
+  },
+);
+
+gradeRouter.post(
+  '/day',
+  rateLimit({ windowMs: 60_000, max: 6 }),
+  async (req, res) => {
+    try {
+      const visits = parseDayVisits(req.body);
+      const review = await reviewDay(visits);
+      res.json(review);
+    } catch (error) {
+      res.status(error.status || 500).json({ error: 'The day notes could not be written.' });
     }
   },
 );

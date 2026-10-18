@@ -12,7 +12,15 @@
   --focus: #0d47a1;
   --danger: #b71c1c;
   --radius: 16px;
-  --font: 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+  --font: 'Fredoka Variable', 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Buttons and form fields do not inherit the page font on their own. */
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
 }
 
 *,
@@ -637,8 +645,38 @@ h1:focus {
 .stage-frame--debug .stage2-title,
 .stage-frame--debug .stage2-stars,
 .stage-frame--debug .stage2-submit,
-.stage-frame--debug .conclude-panel {
+.stage-frame--debug .conclude-panel,
+.stage-frame--debug .day-note {
   outline: 3px solid #d50000;
+}
+
+.day-note {
+  position: absolute;
+  margin: 0;
+  overflow: auto;
+  color: #2a2118;
+  font-size: 1.35cqi;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.day-note p,
+.day-note ul {
+  margin: 0;
+}
+
+.day-note__title {
+  margin-bottom: 0.45em;
+  font-size: 1.35em;
+  line-height: 1.15;
+}
+
+.day-note ul {
+  padding-left: 1.15em;
+}
+
+.day-note li + li {
+  margin-top: 0.4em;
 }
 
 .stage-frame--wide {

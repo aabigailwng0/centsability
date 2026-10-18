@@ -41,20 +41,26 @@ Animals are ONLY a visual skin and are NOT tied to any topic. Each day:
 ## The 4 stages per customer (25 points each, whole numbers only, 100 per customer)
 1. LISTEN: identify the core problem. Player types a short answer.
    Graded by Gemini against keywords. 0 to 25.
-2. STRATEGIZE: show 5 strategies drawn from a set list for that topic. 2 are
-   clearly stronger than the other 3, and one of those 2 is the best. Player
-   picks exactly 2. Scored by the backend. 0 to 25.
+2. STRATEGIZE: one shared list of 7 strategies, with values stored only on the
+   server (13, 12, 5, 2, and 0). Each visit always shows the two strongest for
+   that topic plus 3 of the other 5. The player picks exactly 2. Only one pair
+   sums to 25. Scored by the backend. 0 to 25.
 3. PRIORITIZE: of the 2 chosen strategies, the player picks which is best.
-   Scored by the backend. 0 to 25.
-4. CONCLUDE: the player types a final recommendation (should reference specific
-   numbers). Graded by Gemini against keywords. 0 to 25.
+   The backend maps that strategy's value onto 25, 20, 15, 10, or 0. Only the
+   13-point strategy scores 25.
+4. CONCLUDE: page 10, the customer back at the desk. The player types why the
+   chosen strategy is best. Gemini grades it 0 to 25. After submit, show the
+   real best strategy, a short explanation tied to the customer's numbers, and
+   the four scores labeled Problem Identification, Strategies, Best Choice, and
+   Reasoning.
 The note (the customer's issue) can be reopened on page 5 and during stages 2
-to 4. After each customer, a small results screen shows the rating, feedback on
-wrong answers, and the stars earned. 1 star = 1 point. A running star total
-shows in the top right corner and updates after each stage. After the 2nd
-customer, an ending screen shows total stars for the day (out of 200) and which
-concept (budgeting, saving, debt) was understood best among those played, plus
-which one to work on.
+to 4. 1 star = 1 point. A running star total shows in the top right and updates
+only after the customer is finished, not after each stage. After the 2nd
+customer, page 11 (the player's avatar: cat, cow, or dog) shows the day. The
+check card is the higher-scoring topic and the X card is the other. Each card
+shows the topic and its stars, like "debt (73)", then 3 bullets: identification,
+multiple choice, and reasoning. A bullet may praise a part only when that
+part's score supports it. The Next day button does not start another day yet.
 
 ## Stage 1 page flow (full-screen photo per page)
 - Page 1: empty desk, auto-advance after 3 seconds.
@@ -90,6 +96,10 @@ financial advice.
 Backend validates the JSON, rounds to a whole number, clamps to 0 to 25, retries
 once, then falls back to a local keyword-match score and canned feedback.
 Cap inputs server-side and rate limit the grade routes.
+The day-end notes are 3 bullets per visit. The server decides each bullet from
+that stage's score and the strategies the player actually picked. Gemini may
+only rephrase those facts. If a rewrite praises a weak part or criticizes a
+strong part, discard it and show the server facts.
 
 ## Reliability
 If Nessie or Gemini fails or is slow, fall back to hardcoded scenario data and
@@ -97,12 +107,15 @@ canned feedback so the game always runs. Strategy values and answer keys stay on
 the backend; the browser never sees them. Scenario data comes from getScenario(topic) on the backend. It reads live Nessie data when available and falls back to a hardcoded scenario file. The frontend never contains scenario text or numbers.
 
 ## Art
-Art is drawn in Figma and ibisPaint X and exported as PNG. Stage 1 photos are
-flat files (no subfolders) in frontend/public/assets/. Names: page1_empty.png,
-then page{2-6}_{bear|bunny|fox}.png. Page 1 is shared by all customers. Load all
-art by name from /assets so new files can be swapped in without code changes.
-Never hardcode image pixel sizes; scale responsively. Stage 2 to 4 art and
-results screens are not made yet; use simple placeholders for them.
+Art is drawn in Figma and ibisPaint X and exported as PNG. Photos are flat
+files (no subfolders) in frontend/public/assets/. Stage 1 customer skins are
+bear, bunny, and fox: page1_empty.png, then page{2-6}_{bear|bunny|fox}.png.
+Player avatars are cat, cow, and dog: page7, page8, page9, and page11 use
+page{n}_{cat|cow|dog}.png.
+Page 10 is the customer again: page10_{bear|bunny|fox}.png. Page 1 is shared.
+Load all art by name from /assets so new files can be swapped in without code
+changes. Never hardcode image pixel sizes; scale responsively. On stages 2 and
+3, every strategy cloud on that screen uses the same font size.
 
 ## Working style
 Build in small stages. Do not add features beyond what is asked. Keep

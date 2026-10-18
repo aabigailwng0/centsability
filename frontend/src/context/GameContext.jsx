@@ -80,6 +80,13 @@ export function GameProvider({ children }) {
   const submitListenAnswer = useCallback((topic, summary) => {
     const requestId = ++listenRequest.current;
     const customerIndex = dayRef.current?.customerIndex ?? 0;
+    setDay((current) => {
+      if (!current) return current;
+      const customers = current.customers.map((customer, index) => (
+        index === customerIndex ? { ...customer, listenAnswer: summary } : customer
+      ));
+      return { ...current, customers };
+    });
     fetch('/api/grade/listen', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -115,7 +122,7 @@ export function GameProvider({ children }) {
     });
   }, []);
 
-  const recordConclude = useCallback((score, feedback, answer) => {
+  const recordConclude = useCallback((score, feedback, answer, reason) => {
     setDay((current) => {
       if (!current) return current;
       const customers = current.customers.map((customer, index) => {
@@ -123,6 +130,7 @@ export function GameProvider({ children }) {
         return {
           ...customer,
           concludeAnswer: answer,
+          concludeReason: reason,
           scores: { ...customer.scores, conclude: score },
           feedback: { ...customer.feedback, conclude: feedback },
         };

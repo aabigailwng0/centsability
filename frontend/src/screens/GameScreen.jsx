@@ -66,7 +66,7 @@ export default function GameScreen() {
   if (phase === 'day-end') {
     return (
       <>
-        <DayEnd />
+        <DayEnd debug={debug} />
         <QuitButton onQuit={goHome} />
       </>
     );

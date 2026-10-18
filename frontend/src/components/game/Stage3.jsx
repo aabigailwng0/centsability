@@ -9,7 +9,7 @@ import {
 } from '../../config/stage3Layout.js';
 import { useGame } from '../../context/GameContext.jsx';
 import IssueNote from './IssueNote.jsx';
-import StrategyCloud from './StrategyCloud.jsx';
+import StrategyCloud, { CloudSizeGroup } from './StrategyCloud.jsx';
 
 function regionStyle(region) {
   return {
@@ -86,16 +86,21 @@ export default function Stage3({ customer, avatarId, debug, onFinished }) {
           onOpen={() => setNoteOpen(true)}
           onClose={() => setNoteOpen(false)}
         />
-        {ready && STAGE3_CLOUDS.map((cloud, index) => (
-          <StrategyCloud
-            key={cloud.id}
-            cloud={cloud}
-            text={chosen[index].text}
-            selected={selected === chosen[index].id}
-            rejecting={false}
-            onToggle={() => choose(chosen[index].id)}
-          />
-        ))}
+        {ready && (
+          <CloudSizeGroup>
+            {STAGE3_CLOUDS.map((cloud, index) => (
+              <StrategyCloud
+                key={cloud.id}
+                cloud={cloud}
+                text={chosen[index].text}
+                selected={selected === chosen[index].id}
+                rejecting={false}
+                textScale={0.88}
+                onToggle={() => choose(chosen[index].id)}
+              />
+            ))}
+          </CloudSizeGroup>
+        )}
         {!ready && (
           <p className="stage2-alert" role="alert">
             The two strategies from the last step are missing.
