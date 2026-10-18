@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import Stage1 from '../components/game/Stage1.jsx';
-import Stage2Placeholder from '../components/game/Stage2Placeholder.jsx';
+import Stage2 from '../components/game/Stage2.jsx';
+import Stage3Placeholder from '../components/game/Stage3Placeholder.jsx';
 import { useGame } from '../context/GameContext.jsx';
 
 export default function GameScreen() {
-  const { day, goHome, setCustomers } = useGame();
+  const { day, avatar, goHome, setCustomers } = useGame();
   const [phase, setPhase] = useState('stage1');
   const [loadError, setLoadError] = useState('');
   const debug = new URLSearchParams(window.location.search).get('debug') === '1';
@@ -56,16 +57,31 @@ export default function GameScreen() {
     );
   }
 
-  if (phase === 'stage2') {
+  const customer = day.customers[day.customerIndex];
+
+  if (phase === 'stage3') {
     return (
       <>
-        <Stage2Placeholder />
+        <Stage3Placeholder />
         <QuitButton onQuit={goHome} />
       </>
     );
   }
 
-  const customer = day.customers[day.customerIndex];
+  if (phase === 'stage2') {
+    return (
+      <>
+        <Stage2
+          customer={customer}
+          avatarId={avatar?.id}
+          debug={debug}
+          onFinished={() => setPhase('stage3')}
+        />
+        <QuitButton onQuit={goHome} />
+      </>
+    );
+  }
+
   return (
     <>
       <Stage1

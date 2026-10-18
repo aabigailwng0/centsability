@@ -97,8 +97,32 @@ export function GameProvider({ children }) {
       });
   }, [recordListenScore]);
 
+  const recordStrategize = useCallback((strategies, chosenIds, score) => {
+    setDay((current) => {
+      if (!current) return current;
+      const customers = current.customers.map((customer, index) => {
+        if (index !== current.customerIndex || customer.scores.strategize != null) return customer;
+        return {
+          ...customer,
+          strategies,
+          chosenStrategyIds: chosenIds,
+          scores: { ...customer.scores, strategize: score },
+        };
+      });
+      return { ...current, customers };
+    });
+  }, []);
+
   const starTotal = day
-    ? day.customers.reduce((sum, customer) => sum + (customer.scores.listen ?? 0), 0)
+    ? day.customers.reduce((sum, customer, index) => {
+      if (index >= day.customerIndex) return sum;
+      const scores = customer.scores;
+      return sum
+        + (scores.listen ?? 0)
+        + (scores.strategize ?? 0)
+        + (scores.prioritize ?? 0)
+        + (scores.conclude ?? 0);
+    }, 0)
     : 0;
 
   const value = useMemo(
@@ -119,6 +143,7 @@ export function GameProvider({ children }) {
       setCustomers,
       recordListenScore,
       submitListenAnswer,
+      recordStrategize,
     }),
     [
       screen,
@@ -137,6 +162,7 @@ export function GameProvider({ children }) {
       setCustomers,
       recordListenScore,
       submitListenAnswer,
+      recordStrategize,
     ],
   );
 

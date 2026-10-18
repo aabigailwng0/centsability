@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { ANIMALS, CHARACTERS } from '../../config/characters.js';
 import { getScenario } from '../game/getScenario.js';
+import { dealStrategies } from '../game/strategies.js';
 
 const TOPICS = ['budgeting', 'saving', 'debt'];
 
@@ -36,5 +37,19 @@ gameRouter.get('/start', async (_req, res) => {
     res.json({ customers });
   } catch {
     res.status(500).json({ error: 'The desk could not open.' });
+  }
+});
+
+gameRouter.get('/strategies', async (req, res) => {
+  const topic = req.query.topic;
+  if (!TOPICS.includes(topic)) {
+    res.status(400).json({ error: 'Unknown topic.' });
+    return;
+  }
+  try {
+    const strategies = await dealStrategies(topic);
+    res.json({ strategies });
+  } catch {
+    res.status(500).json({ error: 'The strategies could not be loaded.' });
   }
 });
