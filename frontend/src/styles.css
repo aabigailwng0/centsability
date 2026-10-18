@@ -232,7 +232,7 @@ h1:focus {
   content: "";
   position: fixed;
   inset: 8px;
-  background: url("/assets/home_page.png") center / contain no-repeat;
+  background: url("/assets/home_page_no_text.png") center / contain no-repeat;
   opacity: 0.4;
   z-index: -1;
   pointer-events: none;
