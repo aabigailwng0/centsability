@@ -17,21 +17,24 @@ export const gameRouter = Router();
 
 // Two different topics, random order, each with a different animal.
 // Facts stay on the server. The browser only receives the story text.
-gameRouter.get('/start', (_req, res) => {
+gameRouter.get('/start', async (_req, res) => {
   const topics = shuffle(TOPICS).slice(0, 2);
   const animals = shuffle(ANIMALS);
 
-  const customers = topics.map((topic, index) => {
-    const animal = animals[index];
-    const name = CHARACTERS[animal];
-    const scenario = getScenario(topic, name);
-    return {
-      topic: scenario.topic,
-      animal,
-      name,
-      issueText: scenario.issueText,
-    };
-  });
-
-  res.json({ customers });
+  try {
+    const customers = await Promise.all(topics.map(async (topic, index) => {
+      const animal = animals[index];
+      const name = CHARACTERS[animal];
+      const scenario = await getScenario(topic, name);
+      return {
+        topic: scenario.topic,
+        animal,
+        name,
+        issueText: scenario.issueText,
+      };
+    }));
+    res.json({ customers });
+  } catch {
+    res.status(500).json({ error: 'The desk could not open.' });
+  }
 });

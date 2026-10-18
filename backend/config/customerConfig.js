@@ -1,23 +1,30 @@
-// Numbers Nessie does not store. getScenario merges these into facts.
-// A later live-Nessie version of getScenario should keep using this file.
-export const CUSTOMER_EXTRAS = {
-  budgeting: {
-    merchantLabels: {
-      'Noodle Nest': 'takeout',
-      StreamStack: 'subscriptions',
-    },
-    daysUntilPayday: 6,
-  },
-  saving: {
-    emergencyFundMonths: 3,
-    savingsHabit: false,
-  },
-  debt: {
-    creditCardApr: 24.99,
-    creditCardMinPayment: 70,
-    interestPortionOfMinimum: 50,
-    loanBalance: 8000,
-    loanApr: 6.5,
-    loanPayment: 180,
-  },
+// Data Nessie does not store. Amounts here are copied into scenario facts
+// before any issue text is written, so the sentences only read those facts.
+
+export const NEEDS_CATEGORIES = ['rent', 'groceries', 'utilities', 'transport'];
+
+export const WANTS_CATEGORIES = [
+  'takeout',
+  'dining',
+  'subscriptions',
+  'rideshare',
+  'shopping',
+  'entertainment',
+];
+
+// How many subscriptions each customer pays for. Maya is budgeting, Jordan is saving.
+export const SUBSCRIPTION_COUNTS = {
+  budgeting: 6,
+  saving: 3,
+};
+
+// Sam, the debt customer. The credit card balance comes from Nessie.
+export const DEBT_TERMS = {
+  creditCardApr: 24,
+  creditCardMinPayment: 105,
+  interestPortionOfMinimum: 84,
+  loanBalance: 6000,
+  loanApr: 7,
+  loanPayment: 180,
+  extraCash: 250,
 };

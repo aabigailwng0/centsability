@@ -106,7 +106,7 @@ function buildPrompt(topic, facts, summary) {
 }
 
 export async function gradeListen(topic, summary) {
-  const { facts } = getScenario(topic, 'Customer');
+  const { facts } = await getScenario(topic, 'Customer');
   const prompt = buildPrompt(topic, facts, summary);
 
   try {
