@@ -34,12 +34,12 @@ export const STAGE3_CLOUDS = [
   {
     id: 'left',
     button: { left: 2.6, top: 19.1, width: 40.8, height: 24.4 },
-    text: { left: 8.5, top: 24, width: 28, height: 14 },
+    text: { left: 7, top: 22.5, width: 31, height: 17 },
   },
   {
     id: 'right',
     button: { left: 59.8, top: 55.9, width: 32.5, height: 22.2 },
-    text: { left: 64, top: 60, width: 24, height: 14 },
+    text: { left: 62.5, top: 58.5, width: 27, height: 16 },
   },
 ];
 

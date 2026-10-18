@@ -40,6 +40,28 @@ const STAGE3_POINTS = new Map([
   [0, 0],
 ]);
 
+export async function bestStrategy(topic) {
+  if (!TOPICS.has(topic)) {
+    const error = new Error('Unknown topic');
+    error.status = 400;
+    throw error;
+  }
+  const { facts } = await getScenario(topic, 'Customer');
+  const view = viewFromFacts(facts);
+  const best = [...STRATEGIES].sort((a, b) => b.values[topic] - a.values[topic])[0];
+  return {
+    facts,
+    id: best.id,
+    text: best.text(view),
+  };
+}
+
+export function strategyText(topic, facts, strategyId) {
+  const item = STRATEGIES.find((entry) => entry.id === strategyId);
+  if (!item) return '';
+  return item.text(viewFromFacts(facts));
+}
+
 export async function dealStrategies(topic) {
   if (!TOPICS.has(topic)) {
     const error = new Error('Unknown topic');

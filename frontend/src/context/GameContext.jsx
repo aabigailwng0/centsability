@@ -23,8 +23,10 @@ export function GameProvider({ children }) {
   const [day, setDay] = useState(null);
   // Bumped when the player leaves, so a late grade cannot land on a new day.
   const listenRequest = useRef(0);
+  const dayRef = useRef(null);
 
   const avatar = AVATARS.find((a) => a.id === avatarId) ?? null;
+  dayRef.current = day;
   const trimmedNickname = nickname.trim();
   const canStart = avatar !== null && trimmedNickname.length > 0;
 
@@ -60,11 +62,11 @@ export function GameProvider({ children }) {
     });
   }, [trimmedNickname]);
 
-  const recordListenScore = useCallback((score, feedback) => {
+  const recordListenScore = useCallback((customerIndex, score, feedback) => {
     setDay((current) => {
       if (!current) return current;
       const customers = current.customers.map((customer, index) => {
-        if (index !== current.customerIndex || customer.scores.listen != null) return customer;
+        if (index !== customerIndex || customer.scores.listen != null) return customer;
         return {
           ...customer,
           scores: { ...customer.scores, listen: score },
@@ -77,6 +79,7 @@ export function GameProvider({ children }) {
 
   const submitListenAnswer = useCallback((topic, summary) => {
     const requestId = ++listenRequest.current;
+    const customerIndex = dayRef.current?.customerIndex ?? 0;
     fetch('/api/grade/listen', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -86,14 +89,14 @@ export function GameProvider({ children }) {
         const data = await response.json().catch(() => ({}));
         if (listenRequest.current !== requestId) return;
         if (!response.ok || typeof data.score !== 'number') {
-          recordListenScore(0, 'We could not check that answer, so this one scored 0.');
+          recordListenScore(customerIndex, 0, 'We could not check that answer, so this one scored 0.');
           return;
         }
-        recordListenScore(data.score, data.feedback);
+        recordListenScore(customerIndex, data.score, data.feedback);
       })
       .catch(() => {
         if (listenRequest.current !== requestId) return;
-        recordListenScore(0, 'We could not check that answer, so this one scored 0.');
+        recordListenScore(customerIndex, 0, 'We could not check that answer, so this one scored 0.');
       });
   }, [recordListenScore]);
 
@@ -109,6 +112,29 @@ export function GameProvider({ children }) {
         };
       });
       return { ...current, customers };
+    });
+  }, []);
+
+  const recordConclude = useCallback((score, feedback, answer) => {
+    setDay((current) => {
+      if (!current) return current;
+      const customers = current.customers.map((customer, index) => {
+        if (index !== current.customerIndex || customer.scores.conclude != null) return customer;
+        return {
+          ...customer,
+          concludeAnswer: answer,
+          scores: { ...customer.scores, conclude: score },
+          feedback: { ...customer.feedback, conclude: feedback },
+        };
+      });
+      return { ...current, customers };
+    });
+  }, []);
+
+  const finishCustomer = useCallback(() => {
+    setDay((current) => {
+      if (!current || current.customerIndex >= current.customers.length) return current;
+      return { ...current, customerIndex: current.customerIndex + 1 };
     });
   }, []);
 
@@ -160,6 +186,8 @@ export function GameProvider({ children }) {
       submitListenAnswer,
       recordStrategize,
       recordPrioritize,
+      recordConclude,
+      finishCustomer,
     }),
     [
       screen,
@@ -180,6 +208,8 @@ export function GameProvider({ children }) {
       submitListenAnswer,
       recordStrategize,
       recordPrioritize,
+      recordConclude,
+      finishCustomer,
     ],
   );
 

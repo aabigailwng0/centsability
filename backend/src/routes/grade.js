@@ -1,10 +1,12 @@
 import { Router } from 'express';
+import { gradeConclude } from '../grading/gradeConclude.js';
 import { gradeListen } from '../grading/gradeListen.js';
 import { scorePriority, scoreStrategies } from '../game/strategies.js';
 import { rateLimit } from '../http/rateLimit.js';
 
 const TOPICS = new Set(['budgeting', 'saving', 'debt']);
 const MAX_SUMMARY = 200;
+const MAX_REASON = 300;
 
 export const gradeRouter = Router();
 
@@ -31,6 +33,41 @@ gradeRouter.post(
     try {
       const result = await gradeListen(topic, summary.slice(0, MAX_SUMMARY));
       res.json({ score: result.score, feedback: result.feedback });
+    } catch {
+      res.status(500).json({ error: 'Grading failed. Please try again.' });
+    }
+  },
+);
+
+gradeRouter.post(
+  '/conclude',
+  rateLimit({ windowMs: 60_000, max: 10 }),
+  async (req, res) => {
+    const topic = req.body?.topic;
+    const reason = req.body?.reason;
+    const chosenId = req.body?.chosenId;
+    if (!TOPICS.has(topic)) {
+      res.status(400).json({ error: 'Unknown topic.' });
+      return;
+    }
+    if (typeof reason !== 'string') {
+      res.status(400).json({ error: 'The reason must be text.' });
+      return;
+    }
+    if (reason.length > MAX_REASON) {
+      res.status(400).json({ error: 'The reason must be 300 characters or fewer.' });
+      return;
+    }
+    try {
+      const result = await gradeConclude(topic, reason.slice(0, MAX_REASON), chosenId);
+      res.json({
+        score: result.score,
+        feedback: result.feedback,
+        answer: {
+          strategy: result.answer.strategy,
+          explanation: result.explanation,
+        },
+      });
     } catch {
       res.status(500).json({ error: 'Grading failed. Please try again.' });
     }

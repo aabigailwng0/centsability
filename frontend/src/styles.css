@@ -483,6 +483,11 @@ h1:focus {
   font-weight: 700;
 }
 
+.star-mark {
+  color: #f5c400;
+  text-shadow: 0 1px 0 #8a6500;
+}
+
 .stage-hit {
   margin: 0;
   padding: 0;
@@ -517,8 +522,8 @@ h1:focus {
   background: none;
   color: #2a2118;
   font-weight: 700;
-  font-size: 1cqi;
-  line-height: 1.22;
+  font-size: 1.2cqi;
+  line-height: 1.2;
   text-align: center;
   overflow: hidden;
 }
@@ -631,7 +636,8 @@ h1:focus {
 .stage-frame--debug .stage2-note,
 .stage-frame--debug .stage2-title,
 .stage-frame--debug .stage2-stars,
-.stage-frame--debug .stage2-submit {
+.stage-frame--debug .stage2-submit,
+.stage-frame--debug .conclude-panel {
   outline: 3px solid #d50000;
 }
 
@@ -765,4 +771,70 @@ h1:focus {
 
 .stage2-note {
   z-index: 2;
+}
+
+.conclude-panel {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow: auto;
+  margin: 0;
+  padding: 0.45rem 0.65rem;
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink);
+  font-size: 1.85cqi;
+  line-height: 1.35;
+}
+
+.conclude-panel form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-height: 0;
+}
+
+.conclude-panel .listen-panel__input {
+  flex: 1 1 auto;
+  min-height: 4.6em;
+  font-size: 1.15em;
+  line-height: 1.35;
+}
+
+.conclude-panel .label {
+  margin: 0;
+  font-size: 1em;
+}
+
+.conclude-panel .hint,
+.conclude-panel p {
+  margin: 0;
+}
+
+.conclude-panel__strategy {
+  font-weight: 700;
+}
+
+.conclude-panel .btn {
+  align-self: center;
+  min-width: 0;
+  padding: 0.25rem 0.8rem;
+  font-size: 0.95em;
+}
+
+.conclude-scores {
+  margin: 0.2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.conclude-scores li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-weight: 700;
 }

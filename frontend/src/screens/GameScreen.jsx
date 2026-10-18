@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import Stage1 from '../components/game/Stage1.jsx';
 import Stage2 from '../components/game/Stage2.jsx';
 import Stage3 from '../components/game/Stage3.jsx';
-import Stage4Placeholder from '../components/game/Stage4Placeholder.jsx';
+import Stage4 from '../components/game/Stage4.jsx';
+import DayEnd from '../components/game/DayEnd.jsx';
 import { useGame } from '../context/GameContext.jsx';
 
 export default function GameScreen() {
-  const { day, avatar, goHome, setCustomers } = useGame();
+  const { day, avatar, goHome, setCustomers, finishCustomer } = useGame();
   const [phase, setPhase] = useState('stage1');
   const [loadError, setLoadError] = useState('');
   const debug = new URLSearchParams(window.location.search).get('debug') === '1';
@@ -34,6 +35,10 @@ export default function GameScreen() {
     return () => controller.abort();
   }, [day, setCustomers]);
 
+  useEffect(() => {
+    if (!day) setPhase('stage1');
+  }, [day]);
+
   if (loadError) {
     return (
       <section className="screen screen--center" aria-labelledby="game-error-title">
@@ -58,12 +63,30 @@ export default function GameScreen() {
     );
   }
 
+  if (phase === 'day-end') {
+    return (
+      <>
+        <DayEnd />
+        <QuitButton onQuit={goHome} />
+      </>
+    );
+  }
+
   const customer = day.customers[day.customerIndex];
+  const lastCustomer = day.customerIndex >= day.customers.length - 1;
 
   if (phase === 'stage4') {
     return (
       <>
-        <Stage4Placeholder />
+        <Stage4
+          customer={customer}
+          debug={debug}
+          lastCustomer={lastCustomer}
+          onNext={() => {
+            finishCustomer();
+            setPhase(lastCustomer ? 'day-end' : 'stage1');
+          }}
+        />
         <QuitButton onQuit={goHome} />
       </>
     );

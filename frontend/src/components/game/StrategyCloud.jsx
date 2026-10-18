@@ -18,16 +18,26 @@ export default function StrategyCloud({ cloud, text, selected, rejecting, onTogg
     const el = textRef.current;
     if (!box || !el) return undefined;
     const fit = () => {
-      let size = 1.05;
-      el.style.fontSize = `${size}cqi`;
-      while (el.scrollHeight > box.clientHeight + 1 && size > 0.48) {
-        size = Math.round((size - 0.04) * 100) / 100;
-        el.style.fontSize = `${size}cqi`;
+      const height = box.clientHeight;
+      const width = box.clientWidth;
+      if (height < 8 || width < 8) return;
+      let size = Math.round(Math.min(height * 0.42, width * 0.14));
+      const min = 13;
+      size = Math.max(size, min);
+      el.style.fontSize = `${size}px`;
+      while (el.scrollHeight > height + 1 && size > min) {
+        size -= 1;
+        el.style.fontSize = `${size}px`;
       }
     };
     fit();
     const frame = window.requestAnimationFrame(fit);
-    return () => window.cancelAnimationFrame(frame);
+    const observer = new ResizeObserver(fit);
+    observer.observe(box);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
   }, [text]);
 
   return (

@@ -125,7 +125,7 @@ export default function Stage2({ customer, avatarId, debug, onFinished }) {
       <div className={`stage-frame stage-frame--wide${debug ? ' stage-frame--debug' : ''}`}>
         <img src={stage2Photo(page, avatarId)} alt="" />
         <p className="stage2-stars" style={regionStyle(STAGE2_STARS)} aria-live="polite">
-          <span aria-hidden="true">★ </span>
+          <span className="star-mark" aria-hidden="true">★ </span>
           <span className="visually-hidden">Stars: </span>
           {starTotal}
         </p>
