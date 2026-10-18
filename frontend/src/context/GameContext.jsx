@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { AVATARS, NICKNAME_MAX_LENGTH } from '../config/avatars.js';
 
 export const SCREENS = {
@@ -19,12 +19,19 @@ export function GameProvider({ children }) {
   const [screen, setScreen] = useState(SCREENS.HOME);
   const [avatarId, setAvatarId] = useState(null);
   const [nickname, setNickname] = useState('');
+  // One day: two customers, current index, and a score slot per stage.
+  const [day, setDay] = useState(null);
+  // Bumped when the player leaves, so a late grade cannot land on a new day.
+  const listenRequest = useRef(0);
 
   const avatar = AVATARS.find((a) => a.id === avatarId) ?? null;
   const trimmedNickname = nickname.trim();
   const canStart = avatar !== null && trimmedNickname.length > 0;
 
-  const goHome = useCallback(() => setScreen(SCREENS.HOME), []);
+  const goHome = useCallback(() => {
+    listenRequest.current += 1;
+    setScreen(SCREENS.HOME);
+  }, []);
   const openAbout = useCallback(() => setScreen(SCREENS.ABOUT), []);
   const play = useCallback(() => setScreen(SCREENS.AVATAR_SELECT), []);
 
@@ -35,8 +42,64 @@ export function GameProvider({ children }) {
   );
 
   const startGame = useCallback(() => {
-    if (canStart) setScreen(SCREENS.GAME);
+    if (!canStart) return;
+    listenRequest.current += 1;
+    setDay(null);
+    setScreen(SCREENS.GAME);
   }, [canStart]);
+
+  const setCustomers = useCallback((customers) => {
+    setDay({
+      nickname: trimmedNickname,
+      customerIndex: 0,
+      customers: customers.map((customer) => ({
+        ...customer,
+        scores: { listen: null, strategize: null, prioritize: null, conclude: null },
+        feedback: { listen: null, conclude: null },
+      })),
+    });
+  }, [trimmedNickname]);
+
+  const recordListenScore = useCallback((score, feedback) => {
+    setDay((current) => {
+      if (!current) return current;
+      const customers = current.customers.map((customer, index) => {
+        if (index !== current.customerIndex || customer.scores.listen != null) return customer;
+        return {
+          ...customer,
+          scores: { ...customer.scores, listen: score },
+          feedback: { ...customer.feedback, listen: feedback },
+        };
+      });
+      return { ...current, customers };
+    });
+  }, []);
+
+  const submitListenAnswer = useCallback((topic, summary) => {
+    const requestId = ++listenRequest.current;
+    fetch('/api/grade/listen', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic, summary }),
+    })
+      .then(async (response) => {
+        const data = await response.json().catch(() => ({}));
+        if (listenRequest.current !== requestId) return;
+        if (!response.ok || typeof data.score !== 'number') {
+          recordListenScore(0, 'We could not check that answer, so this one scored 0.');
+          return;
+        }
+        recordListenScore(data.score, data.feedback);
+      })
+      .catch(() => {
+        if (listenRequest.current !== requestId) return;
+        recordListenScore(0, 'We could not check that answer, so this one scored 0.');
+      });
+  }, [recordListenScore]);
+
+  const starTotal = day
+    ? day.customers.reduce((sum, customer) => sum + (customer.scores.listen ?? 0), 0)
+    : 0;
 
   const value = useMemo(
     () => ({
@@ -51,6 +114,11 @@ export function GameProvider({ children }) {
       selectAvatar,
       changeNickname,
       startGame,
+      day,
+      starTotal,
+      setCustomers,
+      recordListenScore,
+      submitListenAnswer,
     }),
     [
       screen,
@@ -64,6 +132,11 @@ export function GameProvider({ children }) {
       selectAvatar,
       changeNickname,
       startGame,
+      day,
+      starTotal,
+      setCustomers,
+      recordListenScore,
+      submitListenAnswer,
     ],
   );
 
