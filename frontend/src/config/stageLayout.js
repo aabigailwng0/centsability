@@ -47,7 +47,7 @@ export const STAGE_HOTSPOTS = {
   listen: { left: 39.1, top: 71.9, width: 18.9, height: 8.1 },
   continue: { left: 38.3, top: 71.9, width: 20.6, height: 8.1 },
   note: { left: 12, top: 64, width: 7, height: 12 },
-  issue: { left: 30, top: 60, width: 40, height: 18 },
+  issue: { left: 29, top: 59.5, width: 42, height: 19.5 },
   answer: { left: 24, top: 54, width: 52, height: 32 },
   page4Continue: { left: 39, top: 81, width: 22, height: 6 },
 };

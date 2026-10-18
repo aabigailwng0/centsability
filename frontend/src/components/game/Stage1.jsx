@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { STAGE_HOTSPOTS } from '../../config/stageLayout.js';
 import { useGame } from '../../context/GameContext.jsx';
@@ -23,6 +23,41 @@ function hotspotStyle(region) {
     width: `${region.width}%`,
     height: `${region.height}%`,
   };
+}
+
+// Largest size is 1.7% of the photo width. Longer stories shrink until they fit the cloud.
+const ISSUE_MAX = 0.017;
+const ISSUE_MIN = 0.011;
+
+function IssueText({ text, style }) {
+  const ref = useRef(null);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    const frame = el?.parentElement;
+    if (!el || !frame) return undefined;
+    const fit = () => {
+      const width = frame.clientWidth;
+      if (width < 8 || el.clientHeight < 8) return;
+      let size = width * ISSUE_MAX;
+      const min = width * ISSUE_MIN;
+      el.style.fontSize = `${size}px`;
+      while (el.scrollHeight > el.clientHeight + 1 && size > min) {
+        size -= 0.5;
+        el.style.fontSize = `${size}px`;
+      }
+    };
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, [text]);
+
+  return (
+    <p ref={ref} className="issue-text issue-text--fade" style={style}>
+      {text}
+    </p>
+  );
 }
 
 export default function Stage1({ customer, debug, onFinished }) {
@@ -84,9 +119,7 @@ export default function Stage1({ customer, debug, onFinished }) {
 
       {page === 4 && (
         <>
-          <p className="issue-text issue-text--fade" style={hotspotStyle(STAGE_HOTSPOTS.issue)}>
-            {customer.issueText}
-          </p>
+          <IssueText text={customer.issueText} style={hotspotStyle(STAGE_HOTSPOTS.issue)} />
           <button
             type="button"
             className="btn btn--primary stage-visible-btn"
