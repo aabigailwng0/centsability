@@ -1,0 +1,50 @@
+{
+  "budgeting": {
+    "placeholderName": "Maya",
+    "facts": {
+      "monthlyIncome": 2800,
+      "monthlySpending": 2750,
+      "checking": 90,
+      "savings": 150,
+      "creditCard": 0,
+      "topMerchants": [
+        { "name": "Noodle Nest", "monthly": 420 },
+        { "name": "StreamStack", "monthly": 48 },
+        { "name": "City Transit", "monthly": 120 }
+      ]
+    },
+    "issueText": "I'm Maya, and I bring home $2,800 a month but spend about $2,750 of it. Takeout from Noodle Nest is about $420 a month, and StreamStack subscriptions add another $48. Six days before payday my checking account is down to $90. I keep running out of money before the next paycheck."
+  },
+  "saving": {
+    "placeholderName": "Jordan",
+    "facts": {
+      "monthlyIncome": 3400,
+      "monthlySpending": 2100,
+      "checking": 1800,
+      "savings": 220,
+      "creditCard": 0,
+      "topMerchants": [
+        { "name": "Greenleaf Grocers", "monthly": 310 },
+        { "name": "City Transit", "monthly": 120 },
+        { "name": "Corner Cafe", "monthly": 60 }
+      ]
+    },
+    "issueText": "I'm Jordan, and I earn $3,400 a month and spend about $2,100, so money is left over. I only have $220 in savings, which would not cover even one month of spending. I never move money into savings, so I do not have a savings habit. I also do not have an emergency fund if a surprise bill shows up."
+  },
+  "debt": {
+    "placeholderName": "Sam",
+    "facts": {
+      "monthlyIncome": 3600,
+      "monthlySpending": 2400,
+      "checking": 900,
+      "savings": 400,
+      "creditCard": 2400,
+      "topMerchants": [
+        { "name": "Greenleaf Grocers", "monthly": 280 },
+        { "name": "City Transit", "monthly": 120 },
+        { "name": "Home Electric", "monthly": 95 }
+      ]
+    },
+    "issueText": "I'm Sam, and I owe $2,400 on a credit card at 24.99% APR, plus an $8,000 loan at 6.5% APR. The card's minimum payment is $70, and about $50 of that is interest, so the balance barely moves. I also pay $180 a month on the loan. I earn $3,600 and spend about $2,400, but the high-interest card is the debt that will not shrink."
+  }
+}

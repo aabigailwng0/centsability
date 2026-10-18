@@ -1,0 +1,25 @@
+{
+  "budgeting": {
+    "customerId": "9e32473d-1f2f-4245-8d84-3aa5e341c9e6",
+    "accountIds": {
+      "Checking": "4b044d63-9820-44af-a6d8-588091e3b3ee"
+    },
+    "name": "Maya Budget"
+  },
+  "saving": {
+    "customerId": "e8b65582-96eb-4e60-b0bd-ddef49d15fb0",
+    "accountIds": {
+      "Checking": "4bfadea8-8950-4bc3-9191-b88ffb93dcdd",
+      "Savings": "1f21896c-aa65-41c0-8649-9f80916a34af"
+    },
+    "name": "Jordan Saver"
+  },
+  "debt": {
+    "customerId": "12d739e4-95c8-4098-a7c3-7980a2955e57",
+    "accountIds": {
+      "Checking": "0bf87605-4c85-48aa-9e28-3a44fc186686",
+      "Credit Card": "ae46576b-b2a3-4a6a-84a2-aa6e3cdc561b"
+    },
+    "name": "Sam Debtor"
+  }
+}
